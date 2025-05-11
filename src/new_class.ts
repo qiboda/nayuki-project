@@ -139,6 +139,8 @@ export class NewClassCommand {
                 const headerContent =
                     `#pragma once
 
+#include <${targetName}/minimal.h>
+
 class ${className} 
 {
     public:
@@ -149,16 +151,19 @@ class ${className}
                 const srcFileName = `${filename}.cpp`;
                 const srcFilePath = vscode.Uri.joinPath(folderPath, "src", classDir, srcFileName);
                 const srcContent = `
-#include <${targetName}/minimal.h>
 #include "${targetName}/${classDir ? classDir + "/" : ""}${headerFileName}"
 
 ${className}::${className}() {} 
+${className}::~${className}() {} 
     `;
 
                 Promise.all([
                     await vscode.workspace.fs.writeFile(headerFilePath, Buffer.from(headerContent)),
                     await vscode.workspace.fs.writeFile(srcFilePath, Buffer.from(srcContent))
-                ]).then(() => {
+                ]).then(async () => {
+                    const doc = await vscode.workspace.openTextDocument(headerFilePath);
+                    const editor = await vscode.window.showTextDocument(headerFilePath);
+
                     xmakeCommand.xmakeGenerateCompileCommand();
                 });
             }

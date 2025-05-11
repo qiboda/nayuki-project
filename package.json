@@ -18,6 +18,10 @@
       {
         "command": "nayuki-project.newClass",
         "title": "create a new class"
+      },
+      {
+        "command": "nayuki-project.newModule",
+        "title": "create a new module"
       }
     ],
     "menus": {

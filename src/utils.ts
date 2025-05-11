@@ -24,4 +24,20 @@ export class Utils {
                 .toLowerCase();
         }
     }
+
+    // 转变变量名到全大写
+    public static normalizeToUpperCase(input: string): string {
+        return input.toUpperCase();
+    }
+
+    // 任意字符串到大写驼峰
+    public static normalizeToUpperCamelCase(input: string): string {
+        // 先转成小写下划线
+        let snakeCase = this.normalizeToSnakeCase(input);
+        // 再转成大写驼峰
+        return snakeCase
+            .split("_")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join("");
+    }
 }

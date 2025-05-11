@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import { NewClassCommand } from './new_class';
 import { XmakeCommand } from './xmake';
+import { NewModuleCommand } from './new_module';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -40,6 +41,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let newClassCommand = new NewClassCommand();
 	newClassCommand.register(context, xmakeCommand);
+
+	let newModuleCommand = new NewModuleCommand();
+	newModuleCommand.register(context, xmakeCommand);
 }
 
 // This method is called when your extension is deactivated
