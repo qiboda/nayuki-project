@@ -131,6 +131,7 @@ export class NewClassCommand {
                 let filename = Utils.normalizeToSnakeCase(className);
 
                 let targetName = target!.name;
+                let targetNameMacro = Utils.normalizeToUpperCase(targetName);
                 let folderPath = vscode.Uri.file(target!.path);
 
                 const headerFileName = `${filename}.h`;
@@ -141,7 +142,7 @@ export class NewClassCommand {
 
 #include <${targetName}/minimal.h>
 
-class ${className} 
+class ${targetNameMacro}_API ${className} 
 {
     public:
         ${className}();
@@ -161,8 +162,9 @@ ${className}::~${className}() {}
                     await vscode.workspace.fs.writeFile(headerFilePath, Buffer.from(headerContent)),
                     await vscode.workspace.fs.writeFile(srcFilePath, Buffer.from(srcContent))
                 ]).then(async () => {
-                    const doc = await vscode.workspace.openTextDocument(headerFilePath);
-                    const editor = await vscode.window.showTextDocument(headerFilePath);
+                    await vscode.workspace.openTextDocument(srcFilePath);
+                    await vscode.workspace.openTextDocument(headerFilePath);
+                    await vscode.window.showTextDocument(headerFilePath);
 
                     xmakeCommand.xmakeGenerateCompileCommand();
                 });
