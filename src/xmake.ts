@@ -79,6 +79,26 @@ export class XmakeCommand {
         });
     }
 
+    xmakeBuild() {
+        const command = `xmake build`;
+
+        return new Promise((resolve) => {
+            let cwd = Utils.getWorkspaceFolderPath();
+            exec(command, { cwd }, (error, stdout, stderr) => {
+                if (error) {
+                    vscode.window.showErrorMessage(`xmake build failed: ${error.message}`);
+                    resolve(false);
+                } else if (stderr) {
+                    vscode.window.showErrorMessage(`xmake build error: ${stderr}`);
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            });
+        });
+    }
+
+
     xmakeFixcc() {
         const command = `xmake fixcc`;
 
@@ -117,13 +137,17 @@ export class XmakeCommand {
     }
 
     async xmakeGenerate() {
-        await this.xmakeFixcc().then(async () => {
-            await this.xmakeNayuki().then(() => {
+        await this.xmakeBuild().then(async () => {
+            await this.xmakeFixcc().then(async () => {
+                await this.xmakeNayuki().then(() => {
+                }).catch(() => {
+                    vscode.window.showErrorMessage('xmake nayuki failed');
+                });
             }).catch(() => {
-                vscode.window.showErrorMessage('xmake nayuki failed');
+                vscode.window.showErrorMessage('xmake fixcc failed');
             });
         }).catch(() => {
-            vscode.window.showErrorMessage('xmake fixcc failed');
+            vscode.window.showErrorMessage('xmake build failed');
         });
     }
 
