@@ -204,13 +204,18 @@ export class XmakeCommand {
         return this.nayukiConfig;
     }
 
-    public checkPathInTargets(path: string): [boolean, Target?] {
+    public checkPathInTargets(path: string, exclusive_test: boolean = true): [boolean, Target?] {
         if (!this.nayukiConfig) {
             return [false, undefined];
         }
 
         let targets = this.nayukiConfig.targets;
         for (let target of targets) {
+            if (exclusive_test) {
+                if (target.group === "tests") {
+                    continue;
+                }
+            }
             if (path.includes(target.path)) {
                 return [true, target];
             }
@@ -218,7 +223,7 @@ export class XmakeCommand {
         return [false, undefined];
     }
 
-    public getNayukiTargetNames(): string[] {
+    public getNayukiTargetNames(exclusive_test: boolean = true): string[] {
         if (!this.nayukiConfig) {
             return [];
         }
@@ -231,6 +236,11 @@ export class XmakeCommand {
         let target_names = [];
         for (const target of targets) {
             if (target && target.name) {
+                if (exclusive_test) {
+                    if (target.group === "tests") {
+                        continue;
+                    }
+                }
                 target_names.push(target.name);
             }
         }

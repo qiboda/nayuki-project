@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Target } from './xmake';
 
 export class Utils {
     // get workspace folder path
@@ -39,5 +40,27 @@ export class Utils {
             .split("_")
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join("");
+    }
+
+
+    public static getTargetSubFolderPath(uri: vscode.Uri, target: Target): string {
+        let srcSubPath = "src\\" + target.name + "\\src\\";
+        let srcIndex = uri.fsPath.lastIndexOf(srcSubPath);
+        let srcLen = srcSubPath.length;
+
+        let includeSubPath = "src\\" + target.name + "\\include\\" + target.name + "\\";
+        let includeIndex = uri.fsPath.lastIndexOf(includeSubPath);
+        let includeLen = includeSubPath.length;
+
+        let subFolderPath = "";
+        if (srcIndex !== -1 && includeIndex === -1) {
+            // src/ 目录下
+            subFolderPath = uri.fsPath.substring(srcIndex + srcLen) + "/";
+        }
+        else if (srcIndex === -1 && includeIndex !== -1) {
+            // include/ 目录下
+            subFolderPath = uri.fsPath.substring(includeIndex + includeLen) + "/";
+        }
+        return subFolderPath;
     }
 }

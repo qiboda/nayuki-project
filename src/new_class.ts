@@ -4,62 +4,6 @@ import * as vscode from 'vscode';
 import { XmakeCommand, Target } from './xmake';
 import { Utils } from './utils';
 
-async function dynamicQuickPick() {
-    const quickPick = vscode.window.createQuickPick();
-
-    // 模拟初始选项
-    const options = ['项目 A', '项目 B', '项目 C'];
-    quickPick.items = options.map(item => ({ label: item }));
-
-    // 显示 QuickPick
-    quickPick.placeholder = '请输入或选择一个项目';
-
-    quickPick.onDidChangeValue((value) => {
-        // 每次输入发生变化时，根据输入更新选项
-        const filteredOptions = options.filter(option =>
-            option.toLowerCase().includes(value.toLowerCase())
-        );
-
-        if (value) {
-            // 添加一个 "创建新项目" 选项
-            filteredOptions.push(`🔧 创建新项目: ${value}`);
-        }
-
-        quickPick.items = filteredOptions.map(item => ({ label: item }));
-    });
-
-    quickPick.onDidAccept(() => {
-        const selected = quickPick.selectedItems[0]?.label;
-
-        if (selected) {
-            if (selected.startsWith('🔧')) {
-                // 用户选择了创建新项目
-                vscode.window.showInputBox({
-                    prompt: '请输入新项目的名称',
-                    placeHolder: '例如：NewProject'
-                }).then(input => {
-                    if (input) {
-                        vscode.window.showInformationMessage(`新项目已创建：${input}`);
-                    }
-                });
-            } else {
-                // 用户选择了现有项目
-                vscode.window.showInformationMessage(`你选择了：${selected}`);
-            }
-        }
-    });
-
-    quickPick.onDidHide(() => {
-        // 关闭时清理资源
-        quickPick.dispose();
-    });
-
-    quickPick.show();
-}
-
-
-async function pick() {
-}
 
 export class NewClassCommand {
 
@@ -74,21 +18,7 @@ export class NewClassCommand {
             let [isInTargets, target] = xmakeCommand.checkPathInTargets(uri.fsPath);
 
             if (isInTargets) {
-                let srcSubPath = "src\\" + target!.name + "\\src\\";
-                let srcIndex = uri.fsPath.lastIndexOf(srcSubPath);
-                let srcLen = srcSubPath.length;
-                let includeSubPath = "src\\" + target!.name + "\\include\\" + target!.name + "\\";
-                let includeIndex = uri.fsPath.lastIndexOf(includeSubPath);
-                let includeLen = includeSubPath.length;
-                let classFolderPath = "";
-                if (srcIndex !== -1 && includeIndex === -1) {
-                    // src/ 目录下
-                    classFolderPath = uri.fsPath.substring(srcIndex + srcLen) + "/";
-                }
-                else if (srcIndex === -1 && includeIndex !== -1) {
-                    // include/ 目录下
-                    classFolderPath = uri.fsPath.substring(includeIndex + includeLen) + "/";
-                }
+                let classFolderPath = Utils.getTargetSubFolderPath(uri, target!);
                 await this.newClass(target, xmakeCommand, classFolderPath);
             }
             else {
@@ -155,13 +85,13 @@ export class NewClassCommand {
                 const headerContent =
                     `#pragma once
 
+#include <core/minimal.h>
 #include <${targetName}/minimal.h>
 
 class ${targetNameMacro}_API ${className} 
 {
     public:
         ${className}();
-        ~${className}();
 };`;
 
                 const srcFileName = `${filename}.cpp`;
@@ -170,7 +100,6 @@ class ${targetNameMacro}_API ${className}
 #include "${targetName}/${classDir ? classDir + "/" : ""}${headerFileName}"
 
 ${className}::${className}() {} 
-${className}::~${className}() {} 
     `;
 
                 Promise.all([

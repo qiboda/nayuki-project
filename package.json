@@ -22,6 +22,10 @@
       {
         "command": "nayuki-project.newModule",
         "title": "create a new module"
+      },
+      {
+        "command": "nayuki-project.newTests",
+        "title": "create a new tests"
       }
     ],
     "submenus": [
@@ -49,6 +53,11 @@
           "command": "nayuki-project.newModule",
           "when": "explorerResourceIsFolder",
           "group": "nayuki@2"
+        },
+        {
+          "command": "nayuki-project.newTests",
+          "when": "explorerResourceIsFolder",
+          "group": "nayuki@3"
         }
       ]
     }
