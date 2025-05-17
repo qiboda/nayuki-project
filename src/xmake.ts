@@ -1,7 +1,6 @@
 import { exec } from 'child_process';
 import * as vscode from 'vscode';
 import { Utils } from './utils';
-import { json } from 'stream/consumers';
 
 export class Target {
     public kind: string;
@@ -137,18 +136,18 @@ export class XmakeCommand {
     }
 
     async xmakeGenerate() {
-        await this.xmakeBuild().then(async () => {
-            await this.xmakeFixcc().then(async () => {
-                await this.xmakeNayuki().then(() => {
-                }).catch(() => {
-                    vscode.window.showErrorMessage('xmake nayuki failed');
-                });
+        // await this.xmakeBuild().then(async () => {
+        await this.xmakeFixcc().then(async () => {
+            await this.xmakeNayuki().then(() => {
             }).catch(() => {
-                vscode.window.showErrorMessage('xmake fixcc failed');
+                vscode.window.showErrorMessage('xmake nayuki failed');
             });
         }).catch(() => {
-            vscode.window.showErrorMessage('xmake build failed');
+            vscode.window.showErrorMessage('xmake fixcc failed');
         });
+        // }).catch(() => {
+        //     vscode.window.showErrorMessage('xmake build failed');
+        // });
     }
 
     public xmakeGenerateWatcher(context: vscode.ExtensionContext) {

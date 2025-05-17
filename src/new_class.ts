@@ -70,11 +70,26 @@ export class NewClassCommand {
                 uri = vscode.Uri.file(Utils.getWorkspaceFolderPath());
             }
 
-            // 检查uri是否时target之一，如果不是，就提示选择一个目标，之后，再进行创建
+            // 检查uri是否是target之一，如果不是，就提示选择一个目标，之后，再进行创建
             let [isInTargets, target] = xmakeCommand.checkPathInTargets(uri.fsPath);
 
             if (isInTargets) {
-                await this.newClass(target, xmakeCommand);
+                let srcSubPath = "src\\" + target!.name + "\\src\\";
+                let srcIndex = uri.fsPath.lastIndexOf(srcSubPath);
+                let srcLen = srcSubPath.length;
+                let includeSubPath = "src\\" + target!.name + "\\include\\" + target!.name + "\\";
+                let includeIndex = uri.fsPath.lastIndexOf(includeSubPath);
+                let includeLen = includeSubPath.length;
+                let classFolderPath = "";
+                if (srcIndex !== -1 && includeIndex === -1) {
+                    // src/ 目录下
+                    classFolderPath = uri.fsPath.substring(srcIndex + srcLen) + "/";
+                }
+                else if (srcIndex === -1 && includeIndex !== -1) {
+                    // include/ 目录下
+                    classFolderPath = uri.fsPath.substring(includeIndex + includeLen) + "/";
+                }
+                await this.newClass(target, xmakeCommand, classFolderPath);
             }
             else {
 
@@ -97,11 +112,11 @@ export class NewClassCommand {
         context.subscriptions.push(newClass);
     }
 
-    private async newClass(target: Target | undefined, xmakeCommand: XmakeCommand) {
+    private async newClass(target: Target | undefined, xmakeCommand: XmakeCommand, classFolderPath: String = "") {
         await vscode.window.showInputBox({
             prompt: 'Enter class name',
             placeHolder: 'Class name',
-            value: 'MyClass',
+            value: classFolderPath + 'MyClass',
             validateInput: (value: string) => {
                 if (value.length === 0) {
                     return 'Class name cannot be empty';
