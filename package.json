@@ -24,12 +24,31 @@
         "title": "create a new module"
       }
     ],
+    "submenus": [
+      {
+        "id": "nayuki-project.nayukiMenu",
+        "label": "nayuki",
+        "icon": "$(add)"
+      }
+    ],
     "menus": {
       "explorer/context": [
         {
+          "submenu": "nayuki-project.nayukiMenu",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation@1"
+        }
+      ],
+      "nayuki-project.nayukiMenu": [
+        {
           "command": "nayuki-project.newClass",
           "when": "explorerResourceIsFolder",
-          "group": "navigation"
+          "group": "nayuki@1"
+        },
+        {
+          "command": "nayuki-project.newModule",
+          "when": "explorerResourceIsFolder",
+          "group": "nayuki@2"
         }
       ]
     }
