@@ -29,6 +29,7 @@ function moduleSrcTemplate(moduleName: string): string {
     let moduleNameUpperCamelCase = Utils.normalizeToUpperCamelCase(moduleName);
     return `
 #include <core/core.h>
+#include <core/memory/global_new.h>
 
 #include <${moduleName}/${moduleName}.h>
 

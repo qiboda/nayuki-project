@@ -89,7 +89,7 @@ target("${target.name}_tests")
     --默认情况下不编译
     set_default(false)
 
-    add_packages("gtest")
+    add_packages("gtest", "glm", "tbb", "rpmalloc")
 
     --添加本地target依赖
     add_deps("core")
@@ -104,6 +104,7 @@ target("${target.name}_tests")
                 let testsMainContent =
                     `
 #include <gtest/gtest.h>
+#include <core/memory/global_new.h>
 
 int main( int argc, char** argv )
 {
