@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 
 import { XmakeCommand, Target } from './xmake';
 import { Utils } from './utils';
+import path from 'path';
 
 
 export class NewClassCommand {
@@ -42,11 +43,11 @@ export class NewClassCommand {
         context.subscriptions.push(newClass);
     }
 
-    private async newClass(target: Target | undefined, xmakeCommand: XmakeCommand, classFolderPath: String = "") {
+    private async newClass(target: Target | undefined, xmakeCommand: XmakeCommand, classFolderPath: string = "") {
         await vscode.window.showInputBox({
             prompt: 'Enter class name',
             placeHolder: 'Class name',
-            value: classFolderPath + 'MyClass',
+            value: path.join(classFolderPath, 'MyClass'),
             validateInput: (value: string) => {
                 if (value.length === 0) {
                     return 'Class name cannot be empty';
