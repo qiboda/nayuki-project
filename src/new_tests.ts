@@ -95,8 +95,8 @@ target("${target.name}_tests")
     add_deps("core")
     add_deps("${target.name}")
 
-    if is_host("windows") then
-        --使用gtest的宏在windows中会报错
+    if get_config("toolchain") == "clang" then
+        --使用gtest的宏在windows中的clang中会报错
         add_cxxflags("-Wno-unsafe-buffer-usage")
     end
                     `;
