@@ -19,6 +19,7 @@
         "nayuki",
         "pcxxheader",
         "pheader",
+        "rpmalloc",
         "vulkansdk",
         "xmake"
     ]

@@ -63,7 +63,7 @@ target(module_name)
     set_symbols("debug")
     set_strip("all")
 
-    add_packages("glfw", "glm", "stb", "spdlog", "tracy")
+    add_packages("glfw", "glm", "stb", "spdlog", "tracy", "rpmalloc", "tbb")
     add_packages("vulkansdk")
 
     add_deps("core")
