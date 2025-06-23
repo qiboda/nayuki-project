@@ -20,6 +20,10 @@
         "title": "create a new class"
       },
       {
+        "command": "nayuki-project.newFile",
+        "title": "create a new file"
+      },
+      {
         "command": "nayuki-project.newModule",
         "title": "create a new module"
       },
@@ -44,6 +48,11 @@
         }
       ],
       "nayuki-project.nayukiMenu": [
+        {
+          "command": "nayuki-project.newFile",
+          "when": "explorerResourceIsFolder",
+          "group": "nayuki@0"
+        },
         {
           "command": "nayuki-project.newClass",
           "when": "explorerResourceIsFolder",
