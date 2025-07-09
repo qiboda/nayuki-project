@@ -22,4 +22,4 @@ Initial release of ...
 
 ## TODO
 
-依赖 xmake 插件
+依赖 xmake 插件, 没有导出api，不好用。

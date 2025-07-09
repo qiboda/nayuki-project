@@ -16,6 +16,7 @@
 				"${workspaceFolder}/dist/**/*.js"
 			],
 			"preLaunchTask": "${defaultBuildTask}"
+			// "preLaunchTask": "npm run compile"
 		}
 	]
 }

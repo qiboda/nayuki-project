@@ -101,7 +101,5 @@
   "dependencies": {
     "nayuki-project": "file:"
   },
-  "extensionDependencies": [
-    "tboox.xmake-vscode"
-  ]
+  "extensionDependencies": []
 }

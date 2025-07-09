@@ -116,6 +116,25 @@ export class XmakeCommand {
         });
     }
 
+    xmakeCompileArgs() {
+        const command = `xmake compile_args`;
+
+        return new Promise((resolve) => {
+            let cwd = Utils.getWorkspaceFolderPath();
+            exec(command, { cwd }, (error, stdout, stderr) => {
+                if (error) {
+                    vscode.window.showErrorMessage(`xmake compile_args failed: ${error.message}`);
+                    resolve(false);
+                } else if (stderr) {
+                    vscode.window.showErrorMessage(`xmake compile_args error: ${stderr}`);
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            });
+        });
+    }
+
     xmakeNayuki() {
         const command = `xmake nayuki`;
         return new Promise((resolve) => {

@@ -6,19 +6,11 @@ import { XmakeCommand } from './xmake';
 import { NewModuleCommand } from './new_module';
 import { NewTestsCommand } from './new_tests';
 import { NewFileCommand } from './new_file';
+import { WatchModuleCommand } from './watch_module';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
-
-	const xmakeExtension = vscode.extensions.getExtension("tboox.xmake-vscode");
-	if (xmakeExtension) {
-		await xmakeExtension.activate(); // 必须先激活
-		const api = xmakeExtension.exports;
-
-		// 你现在可以调用 API 了，例如：
-		// api.doSomething();
-	}
 
 	vscode.window.showInformationMessage('nayuki extension is activated');
 
@@ -44,6 +36,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	let newTestsCommand = new NewTestsCommand();
 	newTestsCommand.register(context, xmakeCommand);
+
+	let watchModuleCommand = new WatchModuleCommand();
+	watchModuleCommand.register(context, xmakeCommand);
 }
 
 // This method is called when your extension is deactivated
