@@ -216,7 +216,7 @@ export class XmakeCommand {
                     continue;
                 }
             }
-            if (path.includes(target.path)) {
+            if (path.includes(target.path) && path.replace(target.path, "").startsWith("/")) {
                 return [true, target];
             }
         }

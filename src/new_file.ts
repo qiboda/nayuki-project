@@ -45,7 +45,7 @@ export class NewFileCommand {
 
     private async newFile(target: Target | undefined, xmakeCommand: XmakeCommand, classFolderPath: string = "") {
         await vscode.window.showInputBox({
-            prompt: 'Enter file name',
+            prompt: 'Target: ' + target?.name + ', Enter file name',
             placeHolder: 'file name',
             value: path.join(classFolderPath, 'Filename'),
             validateInput: (value: string) => {

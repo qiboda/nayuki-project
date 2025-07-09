@@ -9,8 +9,16 @@ import { NewFileCommand } from './new_file';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 
+	const xmakeExtension = vscode.extensions.getExtension("tboox.xmake-vscode");
+	if (xmakeExtension) {
+		await xmakeExtension.activate(); // 必须先激活
+		const api = xmakeExtension.exports;
+
+		// 你现在可以调用 API 了，例如：
+		// api.doSomething();
+	}
 
 	vscode.window.showInformationMessage('nayuki extension is activated');
 

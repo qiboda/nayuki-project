@@ -19,3 +19,7 @@ Users appreciate release notes as you update your extension.
 ### 1.0.0
 
 Initial release of ...
+
+## TODO
+
+依赖 xmake 插件
