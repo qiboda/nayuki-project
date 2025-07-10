@@ -14,16 +14,19 @@ export class WatchModuleCommand {
         this.watcher.onDidChange(uri => {
             vscode.window.showInformationMessage(`Module file changed: ${uri.fsPath}`);
             xmakeCommand.xmakeCompileArgs();
+            xmakeCommand.xmakeGenerateCompileCommand();
         });
 
         this.watcher.onDidCreate(uri => {
             vscode.window.showInformationMessage(`Module file created: ${uri.fsPath}`);
             xmakeCommand.xmakeCompileArgs();
+            xmakeCommand.xmakeGenerateCompileCommand();
         });
 
         this.watcher.onDidDelete(uri => {
             vscode.window.showInformationMessage(`Module file deleted: ${uri.fsPath}`);
             xmakeCommand.xmakeCompileArgs();
+            xmakeCommand.xmakeGenerateCompileCommand();
         });
 
         context.subscriptions.push(this.watcher);
